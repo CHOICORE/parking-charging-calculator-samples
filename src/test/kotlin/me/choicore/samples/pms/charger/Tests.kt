@@ -13,38 +13,112 @@ class Tests {
     @Test
     @DisplayName("시간 범위가 하루를 넘어가는 경우")
     fun t2() {
-        // 2024-10-01 09:00
-        val arrivedAt = LocalDateTime.of(2024, 10, 1, 16, 30)
-        // 2024-11-01 00:00
-        val departedAt = LocalDateTime.of(2024, 11, 1, 0, 0)
+        val arrivedAt = LocalDateTime.of(2024, 10, 1, 16, 0)
+        val departedAt = LocalDateTime.of(2024, 10, 3, 12, 0)
         val results = apply(arrivedAt, departedAt, Timebase.FULL_TIME)
         results.forEach {
-            println("$it, 차감 시간: ${it.toMinutes} 분")
+            println("$it, 적용 시간: ${it.toMinutes} 분")
         }
 
         val totalSumOfDurations = results.sumOf { it.toMinutes }
-        println("총 차감 시간: $totalSumOfDurations")
+        println("총 적용 시간: $totalSumOfDurations")
     }
 
     @Test
     fun t3() {
-        // 2024-10-01 09:00
         val arrivedAt = LocalDateTime.of(2024, 10, 1, 16, 30)
-        // 2024-11-01 00:00
         val departedAt = LocalDateTime.of(2024, 10, 1, 21, 0)
 
-        // 09:00 - 18:00 (9시간)
         val timebase = Timebase(LocalTime.of(9, 0), LocalTime.of(18, 0))
 
         val results = apply(arrivedAt, departedAt, timebase)
         results.forEach {
-            println("$it, 차감 시간: ${it.toMinutes}분")
+            println("$it, 적용 시간: ${it.toMinutes}분")
         }
 
         val totalSumOfDurations = results.sumOf { it.toMinutes }
-        println("총 차감 시간: ${totalSumOfDurations}분")
+        println("총 적용 시간: ${totalSumOfDurations}분")
     }
 
+    @Test
+    fun t4() {
+        val arrivedAt = LocalDateTime.of(2024, 10, 1, 18, 0)
+        val departedAt = LocalDateTime.of(2024, 10, 2, 0, 30)
+
+        val timebase = Timebase(LocalTime.of(23, 0), LocalTime.of(1, 0))
+
+        val results = apply(arrivedAt, departedAt, timebase)
+        results.forEach {
+            println("$it, 적용 시간: ${it.toMinutes}분")
+        }
+
+        val totalSumOfDurations = results.sumOf { it.toMinutes }
+        println("총 적용 시간: ${totalSumOfDurations}분")
+    }
+
+    @Test
+    fun t5() {
+        val arrivedAt = LocalDateTime.of(2024, 10, 1, 23, 0)
+        val departedAt = LocalDateTime.of(2024, 10, 11, 2, 0)
+
+        val timebase = Timebase(LocalTime.of(23, 0), LocalTime.of(1, 30))
+
+        val results = apply(arrivedAt, departedAt, timebase)
+        results.forEach {
+            println("$it, 적용 시간: ${it.toMinutes}분")
+        }
+
+        val totalSumOfDurations = results.sumOf { it.toMinutes }
+        println("총 적용 시간: ${totalSumOfDurations}분")
+    }
+
+    @Test
+    fun t6() {
+        val arrivedAt = LocalDateTime.of(2024, 10, 1, 23, 30)
+        val departedAt = LocalDateTime.of(2024, 10, 3, 2, 30)
+
+        val timebase = Timebase(LocalTime.of(23, 0), LocalTime.of(1, 30))
+
+        val results = apply(arrivedAt, departedAt, timebase)
+        results.forEach {
+            println("$it, 적용 시간: ${it.toMinutes}분")
+        }
+
+        val totalSumOfDurations = results.sumOf { it.toMinutes }
+        println("총 적용 시간: ${totalSumOfDurations}분")
+    }
+
+    @Test
+    fun t7() {
+        val arrivedAt = LocalDateTime.of(2024, 10, 1, 9, 0)
+        val departedAt = LocalDateTime.of(2024, 10, 3, 21, 0)
+
+        val timebase = Timebase(LocalTime.of(18, 0), LocalTime.of(22, 30))
+
+        val results = apply(arrivedAt, departedAt, timebase)
+        results.forEach {
+            println("$it, 적용 시간: ${it.toMinutes}분")
+        }
+
+        val totalSumOfDurations = results.sumOf { it.toMinutes }
+        println("총 적용 시간: ${totalSumOfDurations}분")
+    }
+
+    @Test
+    fun t8() {
+        val arrivedAt = LocalDateTime.of(2024, 10, 1, 9, 0)
+        val departedAt = LocalDateTime.of(2024, 10, 3, 21, 0)
+
+        val timebase = Timebase(LocalTime.of(18, 0), LocalTime.of(22, 30))
+
+        val results = apply(arrivedAt, departedAt, timebase)
+        results.forEach {
+            println("$it, 적용 시간: ${it.toMinutes}분")
+        }
+
+        val totalSumOfDurations = results.sumOf { it.toMinutes }
+        println("총 적용 시간: ${totalSumOfDurations}분")
+    }
 
 
     fun apply(
@@ -57,26 +131,23 @@ class Tests {
 
         val applies = mutableListOf<Result>()
         if (beginDate == endDate) {
-            // 도착일과 출발일이 같은 경우
             analyze(arrivedAt, departedAt, timebase)?.let { applies.add(it) }
         } else {
-            // 첫날 처리 (도착 시점부터 그날 자정까지)
-            analyze(arrivedAt, beginDate.plusDays(1).atStartOfDay(), timebase)?.let { applies.add(it) }
+            analyze(arrivedAt, beginDate.atTime(LocalTime.MAX), timebase)?.let { applies.add(it) }
 
-            // 중간 날짜 처리 (while 루프 사용)
             var current = beginDate.plusDays(1)
             while (current.isBefore(endDate)) {
                 analyze(
-                    current.atStartOfDay(),
-                    current.plusDays(1).atStartOfDay(),
+                    current.atTime(LocalTime.MIN),
+                    current.atTime(LocalTime.MAX),
                     timebase
                 )?.let { applies.add(it) }
                 current = current.plusDays(1)
             }
 
-            // 마지막 날 처리 (자정부터 출발 시점까지)
             analyze(endDate.atStartOfDay(), departedAt, timebase)?.let { applies.add(it) }
         }
+
         return applies.toList()
     }
 
@@ -98,59 +169,48 @@ class Tests {
             return null
         }
 
+        var start: LocalDateTime = from
+        var end: LocalDateTime = to
 
-        val effected1 = timebase.contains(from.toLocalTime())
-        val effected2 = timebase.contains(to.toLocalTime())
+        if (timebase.crossesMidnight) {
+            if (from.toLocalTime() <= timebase.from) {
+                start = from.toLocalDate().atTime(timebase.from)
+                if (start > to) {
+                    start = from.toLocalDate().atStartOfDay()
+                }
+            }
 
-        println(effected1)
-        println(effected2)
+            if (to.toLocalTime() == LocalTime.MAX) {
+                end = to.toLocalDate().plusDays(1).atStartOfDay()
+            } else {
+                if (to.toLocalTime() > timebase.to) {
+                    end = to.toLocalDate().atTime(timebase.to)
+                }
+            }
 
-        return null
+            return Result(start, end, timebase)
+        } else {
+            if (from.toLocalTime() < timebase.from) {
+                start = from.toLocalDate().atTime(timebase.from)
+            }
+
+
+            if (to.toLocalTime() == LocalTime.MAX) {
+                if (timebase.to == LocalTime.MAX) {
+                    end = to.toLocalDate().plusDays(1).atStartOfDay()
+                }
+                if (to.toLocalTime() > timebase.to) {
+                    end = to.toLocalDate().atTime(timebase.to)
+                }
+            } else {
+                if (to.toLocalTime() > timebase.to) {
+                    end = to.toLocalDate().atTime(timebase.to)
+                }
+            }
+
+            return Result(start, end, timebase)
+        }
     }
-
-//    fun process(from: LocalDateTime, to: LocalDateTime, timebase: Timebase): Result? {
-//        if (from == to) {
-//            return null
-//        }
-//        val adjustedMin = from.toLocalDate().atTime(timebase.from)
-//        var adjustedMax = to.toLocalDate().atTime(timebase.to)
-//        if (timebase.crossesMidnight) {
-//            if (adjustedMin in from..to && to <= adjustedMax) {
-//                if (to < adjustedMax) {
-//                    adjustedMax = to
-//                }
-//                return Result(adjustedMin, adjustedMax, timebase)
-//            }
-//
-//            if (from <= adjustedMax) {
-//                if (to < adjustedMax) {
-//                    adjustedMax = to
-//                }
-//                return Result(from, adjustedMax, timebase)
-//            }
-//
-//            return null
-//        } else {
-//            if (adjustedMin in from..to) {
-//                if (to < adjustedMax) {
-//                    adjustedMax = to
-//                }
-//
-//                return Result(adjustedMin, adjustedMax, timebase)
-//
-//            }
-//
-//            if (from <= adjustedMax) {
-//                if (to < adjustedMax) {
-//                    adjustedMax = to
-//                }
-//                return Result(from, adjustedMax, timebase)
-//            }
-//
-//            return null
-//        }
-//
-//    }
 
     data class Plan(
         val timebase: Timebase,
