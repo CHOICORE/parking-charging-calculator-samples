@@ -1,6 +1,6 @@
 package me.choicore.samples.pms.charger
 
-import org.assertj.core.api.Assertions.assertThat
+import me.choicore.samples.pms.context.Timebase
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
@@ -10,17 +10,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class Tests {
-    @Test
-    fun t1() {
-        val fullTime: Timebase = Timebase.FULL_TIME
-
-        // then
-        assertThat(fullTime.isFullTime).isTrue()
-        assertThat(fullTime.from).isEqualTo(LocalTime.MIN)
-        assertThat(fullTime.to).isEqualTo(LocalTime.MAX)
-        assertThat(fullTime.duration()).isEqualTo(Timebase.FULL_DAY_OF_MINUTES)
-    }
-
     @Test
     @DisplayName("시간 범위가 하루를 넘어가는 경우")
     fun t2() {
@@ -56,21 +45,7 @@ class Tests {
         println("총 차감 시간: ${totalSumOfDurations}분")
     }
 
-    @Test
-    fun t4() {
-        val same = LocalTime.now()
-        val timebase = Timebase(same, same)
-        assertThat(timebase.crossesMidnight).isTrue()
-        assertThat(timebase.duration()).isEqualTo(1440)
-        assertThat(timebase.isFullTime).isTrue()
-    }
 
-    @Test
-    fun t5() {
-        val timebase = Timebase(LocalTime.now(), LocalTime.now().minusHours(1))
-        assertThat(timebase.crossesMidnight).isTrue()
-        assertThat(timebase.duration()).isLessThan(Timebase.FULL_DAY_OF_MINUTES)
-    }
 
     fun apply(
         arrivedAt: LocalDateTime,
@@ -130,7 +105,7 @@ class Tests {
         println(effected1)
         println(effected2)
 
-        return null;
+        return null
     }
 
 //    fun process(from: LocalDateTime, to: LocalDateTime, timebase: Timebase): Result? {
@@ -176,40 +151,6 @@ class Tests {
 //        }
 //
 //    }
-
-    data class Timebase(
-        val from: LocalTime,
-        val to: LocalTime,
-    ) {
-        val crossesMidnight: Boolean
-            get() = from >= to
-
-        val isFullTime: Boolean
-            get() = from == LocalTime.MIN && to == LocalTime.MAX || from == to
-
-        fun duration(): Long {
-            return if (isFullTime) {
-                FULL_DAY_OF_MINUTES
-            } else if (crossesMidnight) {
-                (Duration.between(from, LocalTime.MAX) + Duration.between(LocalTime.MIN, to)).toMinutes() + 1
-            } else {
-                Duration.between(from, to).toMinutes()
-            }
-        }
-
-        operator fun contains(time: LocalTime): Boolean {
-            return if (crossesMidnight) {
-                time >= from || time <= to
-            } else {
-                time in from..to
-            }
-        }
-
-        companion object {
-            const val FULL_DAY_OF_MINUTES = 24 * 60L
-            val FULL_TIME = Timebase(LocalTime.MIN, LocalTime.MAX)
-        }
-    }
 
     data class Plan(
         val timebase: Timebase,
