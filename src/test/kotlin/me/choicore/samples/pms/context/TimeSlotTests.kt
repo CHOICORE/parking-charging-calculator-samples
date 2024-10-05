@@ -39,11 +39,11 @@ class TimeSlotTests {
     fun t4() {
         val timeSlot = TimeSlot(LocalTime.of(9, 0), LocalTime.of(10, 0))
         assertThat(timeSlot.crossesMidnight).isFalse()
-        assertThat(timeSlot.contains(LocalTime.of(8, 59))).isFalse()
-        assertThat(timeSlot.contains(LocalTime.of(9, 0))).isTrue()
-        assertThat(timeSlot.contains(LocalTime.of(9, 30))).isTrue()
-        assertThat(timeSlot.contains(LocalTime.of(10, 0))).isTrue()
-        assertThat(timeSlot.contains(LocalTime.of(10, 1))).isFalse()
+        assertThat(LocalTime.of(8, 59) in timeSlot).isFalse()
+        assertThat(LocalTime.of(9, 0) in timeSlot).isTrue()
+        assertThat(LocalTime.of(9, 30) in timeSlot).isTrue()
+        assertThat(LocalTime.of(10, 0) in timeSlot).isTrue()
+        assertThat(LocalTime.of(10, 1) in timeSlot).isFalse()
     }
 
     @Test
@@ -51,10 +51,11 @@ class TimeSlotTests {
     fun t5() {
         val timeSlot = TimeSlot(LocalTime.of(23, 0), LocalTime.of(1, 0))
         assertThat(timeSlot.crossesMidnight).isTrue()
-        assertThat(timeSlot.contains(LocalTime.of(22, 59))).isFalse()
-        assertThat(timeSlot.contains(LocalTime.of(23, 0))).isTrue()
-        assertThat(timeSlot.contains(LocalTime.of(0, 0))).isTrue()
-        assertThat(timeSlot.contains(LocalTime.of(1, 0))).isTrue()
-        assertThat(timeSlot.contains(LocalTime.of(1, 1))).isFalse()
+        assertThat(LocalTime.of(22, 59) in timeSlot).isFalse()
+        assertThat(LocalTime.of(22, 59) in timeSlot).isFalse()
+        assertThat(LocalTime.of(23, 0) in timeSlot).isTrue()
+        assertThat(LocalTime.of(0, 0) in timeSlot).isTrue()
+        assertThat(LocalTime.of(1, 0) in timeSlot).isTrue()
+        assertThat(LocalTime.of(1, 1) in timeSlot).isFalse()
     }
 }
