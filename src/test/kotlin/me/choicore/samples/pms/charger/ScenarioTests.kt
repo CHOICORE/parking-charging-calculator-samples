@@ -198,7 +198,7 @@ class ScenarioTests {
                 assertThat(it.from)
                     .isEqualTo(beginAt)
                 assertThat(it.to)
-                    .isEqualTo(endAt.toLocalDate().atTime(timeSlot.endTimeExclusive))
+                    .isEqualTo(endAt.toLocalDate().atTime(timeSlot.endTimeInclusive))
             }
 
             displayResultsWithDuration(results)
@@ -370,7 +370,7 @@ class ScenarioTests {
         fun t7() {
             val from: LocalTime = LocalTime.of(9, 0)
             val to: LocalTime = LocalTime.of(18, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), from.minusMinutes(1))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), to.plusMinutes(1))
@@ -435,7 +435,7 @@ class ScenarioTests {
         fun t10() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(17, 59))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(9, 1))
@@ -459,7 +459,7 @@ class ScenarioTests {
         fun t11() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(17, 59))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(8, 59))
@@ -483,7 +483,7 @@ class ScenarioTests {
         fun t12() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(17, 59))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(9, 0))
@@ -507,7 +507,7 @@ class ScenarioTests {
         fun t13() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(18, 1))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(9, 1))
@@ -531,7 +531,7 @@ class ScenarioTests {
         fun t14() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(18, 1))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(8, 59))
@@ -555,7 +555,7 @@ class ScenarioTests {
         fun t15() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(18, 1))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(9, 0))
@@ -579,7 +579,7 @@ class ScenarioTests {
         fun t16() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(18, 0))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(9, 1))
@@ -603,7 +603,7 @@ class ScenarioTests {
         fun t17() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(18, 0))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(8, 59))
@@ -627,7 +627,7 @@ class ScenarioTests {
         fun t18() {
             val from: LocalTime = LocalTime.of(18, 0)
             val to: LocalTime = LocalTime.of(9, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(18, 0))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(9, 0))
@@ -651,7 +651,7 @@ class ScenarioTests {
         fun t19() {
             val from: LocalTime = LocalTime.of(23, 0)
             val to: LocalTime = LocalTime.of(0, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(22, 0))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(23, 59))
@@ -677,7 +677,7 @@ class ScenarioTests {
         fun t20() {
             val from: LocalTime = LocalTime.of(23, 0)
             val to: LocalTime = LocalTime.of(0, 0)
-            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeExclusive = to)
+            val timeSlot = TimeSlot(startTimeInclusive = from, endTimeInclusive = to)
 
             val beginAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 1), LocalTime.of(0, 0))
             val endAt: LocalDateTime = LocalDateTime.of(LocalDate.of(2024, 10, 3), LocalTime.of(22, 59))
@@ -746,8 +746,8 @@ class ScenarioTests {
         }
         println("evaluate: $from ~ $to, $timeSlot")
         if (timeSlot.crossesMidnight) {
-            if (timeSlot.endTimeExclusive != LocalTime.MIDNIGHT) {
-                inspect(from, to, TimeSlot(LocalTime.MIDNIGHT, timeSlot.endTimeExclusive), context)
+            if (timeSlot.endTimeInclusive != LocalTime.MIDNIGHT) {
+                inspect(from, to, TimeSlot(LocalTime.MIDNIGHT, timeSlot.endTimeInclusive), context)
             }
             inspect(from, to, TimeSlot(timeSlot.startTimeInclusive, LocalTime.MAX), context)
         } else {
@@ -775,7 +775,7 @@ class ScenarioTests {
 
             from.toLocalTime() in timeSlot && to.toLocalTime() !in timeSlot -> {
                 start = from
-                context.add(Result(start, to.toLocalDate().atTime(timeSlot.endTimeExclusive), timeSlot))
+                context.add(Result(start, to.toLocalDate().atTime(timeSlot.endTimeInclusive), timeSlot))
             }
 
             from.toLocalTime() !in timeSlot && to.toLocalTime() in timeSlot -> {
@@ -783,11 +783,39 @@ class ScenarioTests {
                 context.add(Result(start, end, timeSlot))
             }
 
-            from.toLocalTime() < timeSlot.startTimeInclusive && to.toLocalTime() > timeSlot.endTimeExclusive -> {
+            from.toLocalTime() < timeSlot.startTimeInclusive && to.toLocalTime() > timeSlot.endTimeInclusive -> {
                 start = from.toLocalDate().atTime(timeSlot.startTimeInclusive)
-                context.add(Result(start, to.toLocalDate().atTime(timeSlot.endTimeExclusive), timeSlot))
+                context.add(Result(start, to.toLocalDate().atTime(timeSlot.endTimeInclusive), timeSlot))
             }
         }
+    }
+
+    @Test
+    @DisplayName("TimeSlot is overlap")
+    fun t1() {
+        val slot1 = TimeSlot(LocalTime.of(9, 0), LocalTime.of(18, 0))
+        val slot2 = TimeSlot(LocalTime.of(18, 0), LocalTime.of(4, 0))
+
+        Timeline()
+            .apply {
+                add(slot1)
+                add(slot2)
+            }
+    }
+
+    class Timeline {
+        private val _slots: MutableList<TimeSlot> = mutableListOf()
+        val slots: List<TimeSlot> get() = _slots.toList()
+
+        fun add(slot: TimeSlot) {
+            _slots.forEach {
+                if (it.overlap(slot)) {
+                    throw IllegalArgumentException("TimeSlot is overlap")
+                }
+                _slots.add(slot)
+            }
+        }
+
     }
 
     class Context {

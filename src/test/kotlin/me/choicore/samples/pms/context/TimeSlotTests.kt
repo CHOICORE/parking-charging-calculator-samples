@@ -13,7 +13,7 @@ class TimeSlotTests {
         val timeSlot: TimeSlot = TimeSlot.FULL_TIME
         assertThat(timeSlot.isFullTime).isTrue()
         assertThat(timeSlot.startTimeInclusive).isEqualTo(LocalTime.MIN)
-        assertThat(timeSlot.endTimeExclusive).isEqualTo(LocalTime.MAX)
+        assertThat(timeSlot.endTimeInclusive).isEqualTo(LocalTime.MAX)
         assertThat(timeSlot.totalMinutes).isEqualTo(TimeSlot.FULL_DAY_OF_MINUTES)
     }
 
