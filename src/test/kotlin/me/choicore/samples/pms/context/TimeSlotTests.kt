@@ -18,7 +18,7 @@ class TimeSlotTests {
     }
 
     @Test
-    @DisplayName("시작과 종료 시간이 같을 수 없다. ")
+    @DisplayName("시작과 종료 시간이 같을 수 없다.")
     fun t2() {
         val same = LocalTime.now()
         assertThatThrownBy {
@@ -27,16 +27,15 @@ class TimeSlotTests {
     }
 
     @Test
-    @DisplayName("시작 시간이 종료 시간보다 늦은 경우 자정이 지난 것으로 판단한다.")
+    @DisplayName("시작 시간이 종료 시간 이후인 경우 자정이 지난 것으로 판단한다.")
     fun t3() {
-
         val timeSlot = TimeSlot(LocalTime.now(), LocalTime.now().minusHours(1))
         assertThat(timeSlot.crossesMidnight).isTrue()
         assertThat(timeSlot.totalMinutes).isLessThan(TimeSlot.FULL_DAY_OF_MINUTES)
     }
 
     @Test
-    @DisplayName("시작 시간이 종료 시간보다 빠른 경우 포함 여부 확인")
+    @DisplayName("시작 시간이 종료 시간 이전인 경우")
     fun t4() {
         val timeSlot = TimeSlot(LocalTime.of(9, 0), LocalTime.of(10, 0))
         assertThat(timeSlot.crossesMidnight).isFalse()
@@ -48,7 +47,7 @@ class TimeSlotTests {
     }
 
     @Test
-    @DisplayName("시작 시간이 종료 시간보다 늦은 경우 포함 여부 확인")
+    @DisplayName("시작 시간과 종료시간이 자정을 넘어가는 경우")
     fun t5() {
         val timeSlot = TimeSlot(LocalTime.of(23, 0), LocalTime.of(1, 0))
         assertThat(timeSlot.crossesMidnight).isTrue()
