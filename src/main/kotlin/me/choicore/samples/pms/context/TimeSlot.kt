@@ -8,7 +8,7 @@ data class TimeSlot(
     val endTimeInclusive: LocalTime,
 ) {
     init {
-        require(this.startTimeInclusive != this.endTimeInclusive) { "시작 시간과 끝 시간이 같을 수 없습니다." }
+        require(this.startTimeInclusive != this.endTimeInclusive) { "시작 시간과 종료 시간이 같을 수 없습니다." }
     }
 
     val crossesMidnight: Boolean = this.startTimeInclusive > this.endTimeInclusive
