@@ -24,6 +24,8 @@ class TimeSlotTests {
         assertThatThrownBy {
             TimeSlot(same, same)
         }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("시작 시간과 종료 시간이 같을 수 없습니다.")
     }
 
     @Test
