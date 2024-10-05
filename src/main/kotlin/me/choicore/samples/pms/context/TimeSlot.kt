@@ -13,19 +13,19 @@ data class TimeSlot(
 
     val crossesMidnight: Boolean = this.startTimeInclusive > this.endTimeInclusive
 
-    private val crossesMidnightFirstPart: TimeSlot? =
-        if (this.crossesMidnight) TimeSlot(this.startTimeInclusive, LocalTime.MAX) else null
-
-    private val crossesMidnightSecondPart: TimeSlot? =
+    val crossesMidnightFirstTimeSlot: TimeSlot? =
         if (this.crossesMidnight && this.endTimeInclusive != LocalTime.MIDNIGHT
         ) {
             TimeSlot(LocalTime.MIDNIGHT, this.endTimeInclusive)
         } else null
 
+    val crossesMidnightSecondPart: TimeSlot? =
+        if (this.crossesMidnight) TimeSlot(this.startTimeInclusive, LocalTime.MAX) else null
+
     val isFullTime: Boolean = (this.startTimeInclusive == LocalTime.MIN) && (this.endTimeInclusive == LocalTime.MAX)
 
     val totalMinutes: Long = when {
-        isFullTime -> FULL_DAY_OF_MINUTES
+        this.isFullTime -> FULL_DAY_OF_MINUTES
         this.crossesMidnight -> {
             val firstPart: Long = Duration.between(this.startTimeInclusive, LocalTime.MAX).toMinutes() + 1
             val secondPart: Long = Duration.between(LocalTime.MIDNIGHT, this.endTimeInclusive).toMinutes()
@@ -35,15 +35,15 @@ data class TimeSlot(
         else -> Duration.between(this.startTimeInclusive, this.endTimeInclusive).toMinutes()
     }
 
-    fun overlap(other: TimeSlot): Boolean {
-        return false
+    fun isOverlap(other: TimeSlot): Boolean {
+        TODO("Not yet implemented")
     }
 
     operator fun contains(time: LocalTime): Boolean =
         if (this.crossesMidnight) {
-            val firstPart: Boolean = this.crossesMidnightFirstPart?.let { time in it } ?: false
-            val secondPart: Boolean = this.crossesMidnightSecondPart?.let { time in it } ?: false
-            firstPart || secondPart
+            val firstPart: Boolean = this.crossesMidnightSecondPart?.let { time in it } ?: false
+            val secondPart: Boolean = this.crossesMidnightFirstTimeSlot?.let { time in it } ?: false
+            firstPart && secondPart
         } else {
             time in this.startTimeInclusive..this.endTimeInclusive
         }

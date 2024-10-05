@@ -740,16 +740,15 @@ class ScenarioTests {
         timeSlot: TimeSlot,
         context: Context,
     ) {
+        println("evaluate: $from ~ $to, $timeSlot")
         if (timeSlot.isFullTime) {
             context.add(Result(from, to, timeSlot))
             return
         }
-        println("evaluate: $from ~ $to, $timeSlot")
+
         if (timeSlot.crossesMidnight) {
-            if (timeSlot.endTimeInclusive != LocalTime.MIDNIGHT) {
-                inspect(from, to, TimeSlot(LocalTime.MIDNIGHT, timeSlot.endTimeInclusive), context)
-            }
-            inspect(from, to, TimeSlot(timeSlot.startTimeInclusive, LocalTime.MAX), context)
+            inspect(from, to, timeSlot.crossesMidnightFirstTimeSlot, context)
+            inspect(from, to, timeSlot.crossesMidnightSecondPart, context)
         } else {
             inspect(from, to, timeSlot, context)
         }
@@ -758,9 +757,13 @@ class ScenarioTests {
     private fun inspect(
         from: LocalDateTime,
         to: LocalDateTime,
-        timeSlot: TimeSlot,
+        timeSlot: TimeSlot?,
         context: Context,
     ) {
+        if (timeSlot == null) {
+            return
+        }
+
         val start: LocalDateTime
         val end: LocalDateTime =
             if (to.toLocalTime() == LocalTime.MAX) {
@@ -809,7 +812,7 @@ class ScenarioTests {
 
         fun add(slot: TimeSlot) {
             _slots.forEach {
-                if (it.overlap(slot)) {
+                if (it.isOverlap(slot)) {
                     throw IllegalArgumentException("TimeSlot is overlap")
                 }
                 _slots.add(slot)
