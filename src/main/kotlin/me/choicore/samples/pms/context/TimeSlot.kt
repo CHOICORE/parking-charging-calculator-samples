@@ -17,35 +17,53 @@ data class TimeSlot(
         if (this.crossesMidnight && this.endTimeInclusive != LocalTime.MIDNIGHT
         ) {
             TimeSlot(LocalTime.MIDNIGHT, this.endTimeInclusive)
-        } else null
+        } else {
+            null
+        }
 
     val crossesMidnightSecondPart: TimeSlot? =
         if (this.crossesMidnight) TimeSlot(this.startTimeInclusive, LocalTime.MAX) else null
 
     val isFullTime: Boolean = (this.startTimeInclusive == LocalTime.MIN) && (this.endTimeInclusive == LocalTime.MAX)
 
-    val totalMinutes: Long = when {
-        this.isFullTime -> FULL_DAY_OF_MINUTES
-        this.crossesMidnight -> {
-            val firstPart: Long = Duration.between(this.startTimeInclusive, LocalTime.MAX).toMinutes() + 1
-            val secondPart: Long = Duration.between(LocalTime.MIDNIGHT, this.endTimeInclusive).toMinutes()
-            firstPart + secondPart
+    val totalMinutes: Long =
+        when {
+            this.isFullTime -> FULL_DAY_OF_MINUTES
+            this.crossesMidnight -> {
+                val firstPart: Long = Duration.between(this.startTimeInclusive, LocalTime.MAX).toMinutes() + 1
+                val secondPart: Long = Duration.between(LocalTime.MIDNIGHT, this.endTimeInclusive).toMinutes()
+                firstPart + secondPart
+            }
+
+            else -> Duration.between(this.startTimeInclusive, this.endTimeInclusive).toMinutes()
         }
 
-        else -> Duration.between(this.startTimeInclusive, this.endTimeInclusive).toMinutes()
-    }
+    fun isOverlap(other: TimeSlot): Boolean =
+        when {
+            // 둘 다 자정을 넘기는 경우 무조건 겹침
+            this.crossesMidnight && other.crossesMidnight -> true
 
-    fun isOverlap(other: TimeSlot): Boolean {
-        TODO("Not yet implemented")
-    }
+            !this.crossesMidnight && other.crossesMidnight ->
+                other.startTimeInclusive.isBefore(this.endTimeInclusive) ||
+                    other.endTimeInclusive.isAfter(this.startTimeInclusive)
+
+            this.crossesMidnight ->
+                this.startTimeInclusive.isBefore(other.endTimeInclusive) ||
+                    this.endTimeInclusive.isAfter(other.startTimeInclusive)
+
+            else ->
+                this.endTimeInclusive.isAfter(other.startTimeInclusive) &&
+                    this.startTimeInclusive.isBefore(other.endTimeInclusive)
+        }
+
+    operator fun contains(other: TimeSlot): Boolean = other.startTimeInclusive in this && other.endTimeInclusive in this
 
     operator fun contains(time: LocalTime): Boolean =
-        if (this.crossesMidnight) {
-            val firstPart: Boolean = this.crossesMidnightSecondPart?.let { time in it } ?: false
-            val secondPart: Boolean = this.crossesMidnightFirstTimeSlot?.let { time in it } ?: false
-            firstPart && secondPart
-        } else {
+        if (!this.crossesMidnight) {
             time in this.startTimeInclusive..this.endTimeInclusive
+        } else {
+            (this.crossesMidnightSecondPart != null && time in this.crossesMidnightSecondPart) ||
+                (this.crossesMidnightFirstTimeSlot != null && time in this.crossesMidnightFirstTimeSlot)
         }
 
     companion object {

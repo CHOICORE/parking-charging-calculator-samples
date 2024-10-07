@@ -2,6 +2,7 @@ package me.choicore.samples.pms.charger
 
 import me.choicore.samples.pms.context.TimeSlot
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatNoException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -794,15 +795,32 @@ class ScenarioTests {
     }
 
     @Test
-    @DisplayName("TimeSlot is overlap")
     fun t1() {
         val slot1 = TimeSlot(LocalTime.of(9, 0), LocalTime.of(18, 0))
-        val slot2 = TimeSlot(LocalTime.of(18, 0), LocalTime.of(4, 0))
+        val slot2 = TimeSlot(LocalTime.of(18, 0), LocalTime.of(9, 0))
 
-        Timeline()
-            .apply {
-                add(slot1)
-                add(slot2)
+        assertThatNoException()
+            .isThrownBy {
+                Timeline()
+                    .apply {
+                        add(slot1)
+                        add(slot2)
+                    }
+            }
+    }
+
+    @Test
+    fun t2() {
+        val slot1 = TimeSlot(LocalTime.of(9, 0), LocalTime.of(17, 0))
+        val slot2 = TimeSlot(LocalTime.of(18, 0), LocalTime.of(9, 0))
+
+        assertThatNoException()
+            .isThrownBy {
+                Timeline()
+                    .apply {
+                        add(slot1)
+                        add(slot2)
+                    }
             }
     }
 
@@ -811,14 +829,18 @@ class ScenarioTests {
         val slots: List<TimeSlot> get() = _slots.toList()
 
         fun add(slot: TimeSlot) {
-            _slots.forEach {
-                if (it.isOverlap(slot)) {
-                    throw IllegalArgumentException("TimeSlot is overlap")
-                }
+            if (_slots.isEmpty()) {
                 _slots.add(slot)
+                return
             }
-        }
 
+            _slots.forEach {
+                require(!it.isOverlap(slot)) {
+                    "TimeSlot is overlap"
+                }
+            }
+            _slots.add(slot)
+        }
     }
 
     class Context {
