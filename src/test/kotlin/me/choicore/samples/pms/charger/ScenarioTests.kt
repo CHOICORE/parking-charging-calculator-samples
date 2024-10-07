@@ -2,11 +2,9 @@ package me.choicore.samples.pms.charger
 
 import me.choicore.samples.pms.context.TimeSlot
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatNoException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -794,55 +792,6 @@ class ScenarioTests {
         }
     }
 
-    @Test
-    fun t1() {
-        val slot1 = TimeSlot(LocalTime.of(9, 0), LocalTime.of(18, 0))
-        val slot2 = TimeSlot(LocalTime.of(18, 0), LocalTime.of(9, 0))
-
-        assertThatNoException()
-            .isThrownBy {
-                Timeline()
-                    .apply {
-                        add(slot1)
-                        add(slot2)
-                    }
-            }
-    }
-
-    @Test
-    fun t2() {
-        val slot1 = TimeSlot(LocalTime.of(9, 0), LocalTime.of(17, 0))
-        val slot2 = TimeSlot(LocalTime.of(18, 0), LocalTime.of(9, 0))
-
-        assertThatNoException()
-            .isThrownBy {
-                Timeline()
-                    .apply {
-                        add(slot1)
-                        add(slot2)
-                    }
-            }
-    }
-
-    class Timeline {
-        private val _slots: MutableList<TimeSlot> = mutableListOf()
-        val slots: List<TimeSlot> get() = _slots.toList()
-
-        fun add(slot: TimeSlot) {
-            if (_slots.isEmpty()) {
-                _slots.add(slot)
-                return
-            }
-
-            _slots.forEach {
-                require(!it.isOverlap(slot)) {
-                    "TimeSlot is overlap"
-                }
-            }
-            _slots.add(slot)
-        }
-    }
-
     class Context {
         val results: MutableList<Result> = mutableListOf()
 
@@ -857,41 +806,5 @@ class ScenarioTests {
         val reason: TimeSlot,
     ) {
         val toMinutes get() = Duration.between(from, to).toMinutes()
-    }
-
-    data class Plan(
-        val timeSlot: TimeSlot,
-        val policyType: PolicyType,
-        val rate: Double,
-    )
-
-    enum class PolicyType {
-        SURCHARGE,
-        DISCOUNT,
-    }
-
-    class DayOfWeekRule {
-        val dayOfWeek: DayOfWeek
-        val slots: List<TimeSlot>
-        private val selectedDate: LocalDate?
-
-        constructor(selectedDate: LocalDate, timeSlots: List<TimeSlot>) {
-            this.dayOfWeek = selectedDate.dayOfWeek
-            this.slots = timeSlots
-            this.selectedDate = selectedDate
-        }
-
-        constructor(dayOfWeek: DayOfWeek, timeSlots: List<TimeSlot>) {
-            this.dayOfWeek = dayOfWeek
-            this.slots = timeSlots
-            this.selectedDate = null
-        }
-
-        fun isApplicable(date: LocalDate): Boolean =
-            if (selectedDate != null) {
-                date == selectedDate
-            } else {
-                date.dayOfWeek == dayOfWeek
-            }
     }
 }
