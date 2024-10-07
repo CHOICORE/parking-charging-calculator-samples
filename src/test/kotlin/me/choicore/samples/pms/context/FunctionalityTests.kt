@@ -1,4 +1,4 @@
-package me.choicore.samples.pms.charger
+package me.choicore.samples.pms.context
 
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -12,7 +12,10 @@ class FunctionalityTests {
         divideByDays(beginAt, endAt)
     }
 
-    fun divideByDays(startDateInclusive: LocalDateTime, endDateInclusive: LocalDateTime) {
+    fun divideByDays(
+        startDateInclusive: LocalDateTime,
+        endDateInclusive: LocalDateTime,
+    ) {
         // 첫째, 시작 날짜와 종료 날짜가 같은 경우 또는 종료 시간이 시작 날짜의 다음날 시작 시간인 경우 바로 반환
         if (startDateInclusive.isEqualDate(endDateInclusive) || endDateInclusive == startDateInclusive.atStartOfNextDay()) {
             println("$startDateInclusive ~ $endDateInclusive")
@@ -36,23 +39,13 @@ class FunctionalityTests {
         println("${end.atStartOfDay()} ~ $endDateInclusive")
     }
 
-    fun LocalDateTime.isEqualDate(other: LocalDateTime): Boolean {
-        return this.toLocalDate() == other.toLocalDate()
-    }
+    fun LocalDateTime.isEqualDate(other: LocalDateTime): Boolean = this.toLocalDate() == other.toLocalDate()
 
-    fun LocalDateTime.atStartOfDay(): LocalDateTime {
-        return this.toLocalDate().atStartOfDay()
-    }
+    fun LocalDateTime.atStartOfDay(): LocalDateTime = this.toLocalDate().atStartOfDay()
 
-    fun LocalDateTime.atStartOfNextDay(): LocalDateTime {
-        return this.toLocalDate().plusDays(1).atStartOfDay()
-    }
+    fun LocalDateTime.atStartOfNextDay(): LocalDateTime = this.toLocalDate().plusDays(1).atStartOfDay()
 
-    fun LocalDate.atStartOfNextDay(): LocalDateTime {
-        return this.plusDays(1).atStartOfDay()
-    }
+    fun LocalDate.atStartOfNextDay(): LocalDateTime = this.plusDays(1).atStartOfDay()
 
-    fun LocalDate.nextDay(): LocalDate {
-        return this.plusDays(1)
-    }
+    fun LocalDate.nextDay(): LocalDate = this.plusDays(1)
 }

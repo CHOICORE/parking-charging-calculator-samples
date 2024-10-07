@@ -1,6 +1,5 @@
-package me.choicore.samples.pms.charger
+package me.choicore.samples.pms.context
 
-import me.choicore.samples.pms.context.TimeSlot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
