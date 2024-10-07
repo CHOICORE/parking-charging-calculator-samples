@@ -9,7 +9,6 @@ class TimelineTests {
     fun t1() {
         val slot1 = TimeSlot(LocalTime.of(9, 0), LocalTime.of(18, 0))
         val slot2 = TimeSlot(LocalTime.of(18, 0), LocalTime.of(9, 0))
-
         assertThatNoException()
             .isThrownBy {
                 Timeline.create(slot1, slot2)
@@ -18,12 +17,21 @@ class TimelineTests {
 
     @Test
     fun t2() {
-        val slot1 = TimeSlot(LocalTime.of(9, 0), LocalTime.of(17, 0))
+        assertThatNoException()
+            .isThrownBy {
+                Timeline()
+                    .add(LocalTime.of(9, 0), LocalTime.of(17, 0))
+                    .add(TimeSlot(LocalTime.of(18, 0), LocalTime.of(9, 0)))
+            }
+    }
+
+    @Test
+    fun t3() {
         val slot2 = TimeSlot(LocalTime.of(18, 0), LocalTime.of(9, 0))
         assertThatNoException()
             .isThrownBy {
                 Timeline()
-                    .add(slot1)
+                    .add(LocalTime.of(9, 0), LocalTime.of(17, 0))
                     .add(slot2)
             }
     }
