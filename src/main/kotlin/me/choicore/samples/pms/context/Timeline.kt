@@ -13,9 +13,9 @@ class Timeline {
     }
 
     fun add(
-        startInclusive: LocalTime,
-        endExclusive: LocalTime,
-    ): Timeline = add(slot = TimeSlot(startTimeInclusive = startInclusive, endTimeInclusive = endExclusive))
+        startTimeInclusive: LocalTime,
+        endTimeInclusive: LocalTime,
+    ): Timeline = add(slot = TimeSlot(startTimeInclusive = startTimeInclusive, endTimeInclusive = endTimeInclusive))
 
     private fun canAddSlot(newSlot: TimeSlot): Boolean = this._slots.none { it.isOverlap(newSlot) }
 
@@ -24,5 +24,7 @@ class Timeline {
             Timeline().apply {
                 slots.forEach { add(it) }
             }
+
+        val FULL_TIME: Timeline = create(TimeSlot.FULL_TIME)
     }
 }
